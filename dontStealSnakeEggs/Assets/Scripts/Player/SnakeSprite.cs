@@ -51,20 +51,19 @@ public class SnakeSprite : MonoBehaviour
             {
                 // fetch the body after the head and alter it
                 SpriteRenderer lbRenderer = m_snakeHeadControls.LastBody.gameObject.GetComponent<SpriteRenderer>();
-
-                Debug.Log(m_snakeHeadControls.LastBody.gameObject.name + " " + m_snakeHeadControls.LastDirection + " " + m_snakeHeadControls.DirectionHeadIsFacing);
+                //Debug.Log(m_snakeHeadControls.LastBody.gameObject.name + " " + m_snakeHeadControls.PreviousDirection + " " + m_snakeHeadControls.DirectionHeadIsFacing);
 
                 // check for orientation
-                if (m_snakeHeadControls.LastDirection == m_snakeHeadControls.DirectionHeadIsFacing)
+                if (m_snakeHeadControls.PreviousDirection == m_snakeHeadControls.DirectionHeadIsFacing)
                 {
                     // ==
-                    if (m_snakeHeadControls.LastDirection == Vector2.left || m_snakeHeadControls.LastDirection == Vector2.right)
+                    if (m_snakeHeadControls.PreviousDirection == Vector2.left || m_snakeHeadControls.PreviousDirection == Vector2.right)
                     {
                         lbRenderer.sprite = spriteArray[8];
                     }
                     // ||
                     // ||
-                    else if (m_snakeHeadControls.LastDirection == Vector2.up || m_snakeHeadControls.LastDirection == Vector2.down)
+                    else if (m_snakeHeadControls.PreviousDirection == Vector2.up || m_snakeHeadControls.PreviousDirection == Vector2.down)
                     {
                         lbRenderer.sprite = spriteArray[9];
                     }
@@ -72,26 +71,26 @@ public class SnakeSprite : MonoBehaviour
                 else
                 {
                     // \\==
-                    if ((m_snakeHeadControls.LastDirection == Vector2.left && m_snakeHeadControls.DirectionHeadIsFacing == Vector2.up) ||
-                        (m_snakeHeadControls.LastDirection == Vector2.down && m_snakeHeadControls.DirectionHeadIsFacing == Vector2.right))
+                    if ((m_snakeHeadControls.PreviousDirection == Vector2.left && m_snakeHeadControls.DirectionHeadIsFacing == Vector2.up) ||
+                        (m_snakeHeadControls.PreviousDirection == Vector2.down && m_snakeHeadControls.DirectionHeadIsFacing == Vector2.right))
                     {
                         lbRenderer.sprite = spriteArray[12];
                     }
                     // ==//
-                    else if ((m_snakeHeadControls.LastDirection == Vector2.right && m_snakeHeadControls.DirectionHeadIsFacing == Vector2.up) ||
-                        (m_snakeHeadControls.LastDirection == Vector2.down && m_snakeHeadControls.DirectionHeadIsFacing == Vector2.left))
+                    else if ((m_snakeHeadControls.PreviousDirection == Vector2.right && m_snakeHeadControls.DirectionHeadIsFacing == Vector2.up) ||
+                        (m_snakeHeadControls.PreviousDirection == Vector2.down && m_snakeHeadControls.DirectionHeadIsFacing == Vector2.left))
                     {
                         lbRenderer.sprite = spriteArray[11];
                     }
                     // //==
-                    else if ((m_snakeHeadControls.LastDirection == Vector2.up && m_snakeHeadControls.DirectionHeadIsFacing == Vector2.right) ||
-                        (m_snakeHeadControls.LastDirection == Vector2.left && m_snakeHeadControls.DirectionHeadIsFacing == Vector2.down))
+                    else if ((m_snakeHeadControls.PreviousDirection == Vector2.up && m_snakeHeadControls.DirectionHeadIsFacing == Vector2.right) ||
+                        (m_snakeHeadControls.PreviousDirection == Vector2.left && m_snakeHeadControls.DirectionHeadIsFacing == Vector2.down))
                     {
                         lbRenderer.sprite = spriteArray[13];
                     }
                     // ==\\
-                    else if ((m_snakeHeadControls.LastDirection == Vector2.up && m_snakeHeadControls.DirectionHeadIsFacing == Vector2.left) ||
-                        (m_snakeHeadControls.LastDirection == Vector2.right && m_snakeHeadControls.DirectionHeadIsFacing == Vector2.down))
+                    else if ((m_snakeHeadControls.PreviousDirection == Vector2.up && m_snakeHeadControls.DirectionHeadIsFacing == Vector2.left) ||
+                        (m_snakeHeadControls.PreviousDirection == Vector2.right && m_snakeHeadControls.DirectionHeadIsFacing == Vector2.down))
                     {
                         lbRenderer.sprite = spriteArray[10];
                     }

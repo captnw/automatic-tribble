@@ -35,17 +35,17 @@ public class SnakeControls : MonoBehaviour
         get { return m_lastBodyInserted; }
     }
 
-    public Vector2 LastDirection
+    public Vector2 PreviousDirection
     {
-        get { return m_lastDir; }
+        get { return m_prevDir; }
     }
 
     #endregion
 
 
     // Direction variables
-    private Vector2 m_dir = Vector2.right; // current movement direction
-    private Vector2 m_lastDir = Vector2.zero; // last movement direction
+    private Vector2 m_dir = Vector2.zero; // current movement direction
+    private Vector2 m_prevDir = Vector2.zero; // last movement direction
     private Vector2 m_dirHeadIsFacing = Vector2.right;
 
     // keeps track of the bodies
@@ -79,19 +79,19 @@ public class SnakeControls : MonoBehaviour
         // Prevent reversing with the second condition
         if (h == 1 && DirectionHeadIsFacing != Vector2.left)
         {
-            m_dir = DirectionHeadIsFacing = Vector2.right;
+            m_dir = Vector2.right;
         }
         else if (h == -1 && DirectionHeadIsFacing != Vector2.right)
         {
-            m_dir = DirectionHeadIsFacing = Vector2.left;
+            m_dir = Vector2.left;
         }
         else if (v == 1 && DirectionHeadIsFacing != Vector2.down)
         {
-            m_dir = DirectionHeadIsFacing = Vector2.up;
+            m_dir = Vector2.up;
         }
         else if (v == -1 && DirectionHeadIsFacing != Vector2.up)
         {
-            m_dir = DirectionHeadIsFacing = Vector2.down;
+            m_dir = Vector2.down;
         }
         else
         {
@@ -105,7 +105,8 @@ public class SnakeControls : MonoBehaviour
         // only run the function if we're moving
         if (m_dir != Vector2.zero)
         {
-            m_lastDir = m_dir;
+            m_prevDir = DirectionHeadIsFacing;
+            DirectionHeadIsFacing = m_dir;
 
             // Save current position (gap will be here)
             Vector2 lastHeadPosition = transform.position;
