@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 651531863766428903}
   m_Layer: 0
   m_Name: SnakeBodyPrefab
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -73,8 +73,8 @@ SpriteRenderer:
   m_SortingLayerID: 2026586993
   m_SortingLayer: 1
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 2afc45b8bb89d67429d6d3ab53f8fd8d, type: 3}
-  m_Color: {r: 0.20392159, g: 0.54901963, b: 0.18431373, a: 1}
+  m_Sprite: {fileID: -7573371222609806522, guid: 94465281fd86f604db1c5d6ea298454c, type: 3}
+  m_Color: {r: 0.94509804, g: 0.7490196, b: 0.30588236, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

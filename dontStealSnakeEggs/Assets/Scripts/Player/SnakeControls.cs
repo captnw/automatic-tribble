@@ -5,13 +5,54 @@ using System.Linq;
 
 public class SnakeControls : MonoBehaviour
 {
-    // Current Movement Direction
-    private Vector2 m_dir = Vector2.right;
+    #region Public properties, delegates, events
+
+    public delegate void OnDirectionChange(Vector2 newVal);
+    public event OnDirectionChange OnSnakeDirectionChange;
+
+    public delegate void OnMoved();
+    public event OnMoved OnSnakeMoved;
+
+    public Vector2 DirectionHeadIsFacing
+    {
+        get { return m_dirHeadIsFacing; }
+        set
+        {
+            if (m_dirHeadIsFacing == value) return;
+            m_dirHeadIsFacing = value;
+            OnSnakeDirectionChange?.Invoke(m_dirHeadIsFacing);
+        }
+    }
+
+    public Queue<Transform> SnakeBodies
+    {
+        get { return m_body; }
+    }
+
+    // this will be the body immediately after the head
+    public Transform LastBody
+    {
+        get { return m_lastBodyInserted; }
+    }
+
+    public Vector2 LastDirection
+    {
+        get { return m_lastDir; }
+    }
+
+    #endregion
+
+
+    // Direction variables
+    private Vector2 m_dir = Vector2.right; // current movement direction
+    private Vector2 m_lastDir = Vector2.zero; // last movement direction
     private Vector2 m_dirHeadIsFacing = Vector2.right;
 
     // keeps track of the bodies
     private Queue<Transform> m_body = new Queue<Transform>();
-    private int m_numberOfBodiesLeft = 100; // used for sorting order
+    private Transform m_lastBodyInserted = null; 
+
+    private int m_numberOfBodiesLeft = 50; // used for sorting order
 
     // did snake eat something
     private bool m_hasEaten = false;
@@ -36,14 +77,22 @@ public class SnakeControls : MonoBehaviour
         float v = Input.GetAxisRaw("Vertical");
 
         // Prevent reversing with the second condition
-        if (h == 1 && m_dirHeadIsFacing != Vector2.left)
-            m_dir = m_dirHeadIsFacing = Vector2.right;
-        else if (h == -1 && m_dirHeadIsFacing != Vector2.right)
-            m_dir = m_dirHeadIsFacing = Vector2.left;
-        else if (v == 1 && m_dirHeadIsFacing != Vector2.down)
-            m_dir = m_dirHeadIsFacing = Vector2.up;
-        else if (v == -1 && m_dirHeadIsFacing != Vector2.up)
-            m_dir = m_dirHeadIsFacing = Vector2.down;
+        if (h == 1 && DirectionHeadIsFacing != Vector2.left)
+        {
+            m_dir = DirectionHeadIsFacing = Vector2.right;
+        }
+        else if (h == -1 && DirectionHeadIsFacing != Vector2.right)
+        {
+            m_dir = DirectionHeadIsFacing = Vector2.left;
+        }
+        else if (v == 1 && DirectionHeadIsFacing != Vector2.down)
+        {
+            m_dir = DirectionHeadIsFacing = Vector2.up;
+        }
+        else if (v == -1 && DirectionHeadIsFacing != Vector2.up)
+        {
+            m_dir = DirectionHeadIsFacing = Vector2.down;
+        }
         else
         {
             // Do not move, if not actively holding down input
@@ -56,6 +105,8 @@ public class SnakeControls : MonoBehaviour
         // only run the function if we're moving
         if (m_dir != Vector2.zero)
         {
+            m_lastDir = m_dir;
+
             // Save current position (gap will be here)
             Vector2 lastHeadPosition = transform.position;
 
@@ -76,8 +127,10 @@ public class SnakeControls : MonoBehaviour
                 SpriteRenderer gSpriteRenderer = g.GetComponent<SpriteRenderer>();
                 gSpriteRenderer.sortingOrder = m_numberOfBodiesLeft - m_body.Count;
 
+                // This is now the last item we've inserted in this queue
+                m_lastBodyInserted = g.transform;
+
                 // Keep track of it in our tail list
-                //tail.Insert(0, g.transform);
                 m_body.Enqueue(g.transform);
 
                 // Reset flag
@@ -92,9 +145,13 @@ public class SnakeControls : MonoBehaviour
                 // Dequeue the item, and then enqueue the same item
                 // imagine the queue starting from right behind the head to the end
                 // of its tail
-                m_body.Enqueue(m_body.Dequeue());
+                m_lastBodyInserted = m_body.Dequeue();
+                m_body.Enqueue(m_lastBodyInserted);
             }
+
+            OnSnakeMoved?.Invoke();
         }
+
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
